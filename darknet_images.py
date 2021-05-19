@@ -122,20 +122,28 @@ def image_detection(image_path, network, class_names, class_colors, thresh):
     GPIO.setmode(GPIO.BCM)
     
     # Setup pin number
-    pinGreen =  18 #Green led
-    pinRed = 24 #Red led
+    pinYellow = 8 #Yellow led -> Pin 24 on the board 
+    pinGreen = 18 #Green led -> Pin 12 on the board
+    pinRed = 24 #Red led -> Pin 18 on the board
     # Setup the pin as output direction
     valueLow = GPIO.LOW
     valueHigh = GPIO.HIGH
+    GPIO.setup(pinYellow, GPIO.OUT)
     GPIO.setup(pinGreen, GPIO.OUT)
     GPIO.setup(pinRed, GPIO.OUT)
 
     if(detections[0][0] == "with_mask"):
+        GPIO.output(pinYellow, valueLow)
+        GPIO.output(pinGreen, valueHigh)
+        GPIO.output(pinRed, valueLow)
+    elif(detections[0][0] == "mask_wearing_incorrect"):
+        GPIO.output(pinYellow, valueLow)
         GPIO.output(pinGreen, valueHigh)
         GPIO.output(pinRed, valueLow)
     else:
-        GPIO.output(pinRed, valueHigh)
+        GPIO.output(pinYellow, valueLow)
         GPIO.output(pinGreen, valueLow)
+        GPIO.output(pinRed, valueHigh)
     # Clean it up
     GPIO.cleanup()
 
